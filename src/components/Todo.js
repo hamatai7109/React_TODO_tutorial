@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 const Todo = (props) => {
   const [isEditing, setEditing] = useState(false);
   const [newName, setNewname] = useState("");
+
+  const editFieldRef = useRef(null);
+  const editButtonRef = useRef(null);
 
   // 編集中の文字をリアルタイムで取得
   function handleChange(e) {
@@ -33,6 +36,7 @@ const Todo = (props) => {
           type="text"
           value={newName}
           onChange={handleChange}
+          ref={editFieldRef}
         />
       </div>
       <div className="btn-group">
@@ -66,7 +70,12 @@ const Todo = (props) => {
         </label>
       </div>
       <div className="btn-group">
-        <button type="button" className="btn" onClick={() => setEditing(true)}>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => setEditing(true)}
+          ref={editButtonRef}
+        >
           Edit <span className="visually-hidden">{props.name}</span>
         </button>
         <button
@@ -79,6 +88,15 @@ const Todo = (props) => {
       </div>
     </div>
   );
+
+  // 常にinputにフォーカスが当たっている状態にしておくために、useEffectを使用。
+  useEffect(() => {
+    if (isEditing) {
+      editFieldRef.current.focus();
+    } else {
+      editButtonRef.current.focus();
+    }
+  }, [isEditing]);
 
   return (
     <li className="todo stack-small">
