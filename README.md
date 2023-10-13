@@ -1,5 +1,5 @@
-# React_TODO_advance
+# React_TODO_tutorial
 
-I try to recreate simle todo app with Tailwind CSS.
+I learned how to create react app, how to use React components, and how to use React Hooks(useState, useEffect, useRef)
 
-As I will do this, I'll modify some functions according to upcoming ideas.
+URL: https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_todo_list_beginning
