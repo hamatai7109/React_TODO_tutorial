@@ -2,7 +2,8 @@ import FilterButton from "./components/FilterButton";
 import Form from "./components/Form";
 import Todo from "./components/Todo";
 import { nanoid, nanoids } from "nanoid";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import usePrevious from "./components/util/usePrevious";
 
 //App関数の外でフィルターを定義することで、レンダリングの影響を受けなくする。
 const FILTER_MAP = {
@@ -81,12 +82,23 @@ function App(props) {
     setTasks([...tasks, newTask]);
   }
 
+  const listHeadingRef = useRef(null);
+  const prevTaskLength = usePrevious(tasks.length);
+
+  useEffect(() => {
+    if (tasks.length - prevTaskLength === -1) {
+      listHeadingRef.current.focus();
+    }
+  }, [tasks.length, prevTaskLength]);
+
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
       <Form addTask={addTask} />
       <div className="filters btn-group stack-exception">{filterList}</div>
-      <h2 id="list-heading">{headingText}</h2>
+      <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>
+        {headingText}
+      </h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"

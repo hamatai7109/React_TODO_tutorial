@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import usePrevious from "./util/usePrevious";
 
 const Todo = (props) => {
   const [isEditing, setEditing] = useState(false);
@@ -6,6 +7,8 @@ const Todo = (props) => {
 
   const editFieldRef = useRef(null);
   const editButtonRef = useRef(null);
+
+  const wasEditing = usePrevious(isEditing);
 
   // 編集中の文字をリアルタイムで取得
   function handleChange(e) {
@@ -91,12 +94,13 @@ const Todo = (props) => {
 
   // 常にinputにフォーカスが当たっている状態にしておくために、useEffectを使用。
   useEffect(() => {
-    if (isEditing) {
+    if (!wasEditing && isEditing) {
       editFieldRef.current.focus();
-    } else {
+    }
+    if (wasEditing && !isEditing) {
       editButtonRef.current.focus();
     }
-  }, [isEditing]);
+  }, [isEditing, wasEditing]);
 
   return (
     <li className="todo stack-small">
